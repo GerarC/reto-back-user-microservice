@@ -1,0 +1,9 @@
+spring:
+    profiles:
+        active: local
+    application:
+        name: User's Microservice
+
+app:
+    version: 0.0.1
+    description: Microservice for managing users
