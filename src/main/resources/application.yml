@@ -5,5 +5,6 @@ spring:
         name: User's Microservice
 
 app:
+    name: User's Microservice
     version: 0.0.1
     description: Microservice for managing users

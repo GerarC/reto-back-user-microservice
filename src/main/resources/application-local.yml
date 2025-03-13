@@ -32,5 +32,5 @@ jwt:
 
 server:
     servlet:
-        context-path: ${APP_PATH:/mall/user}
+        context-path: ${APP_PATH:/mall}
     port: 8099
