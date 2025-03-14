@@ -107,4 +107,35 @@ class UserUseCaseTest {
         assertThrows(EntityAlreadyExistsException.class, () -> userUseCase.createOwner(user));
     }
 
+    @Test
+    void isOwner(){
+        when(userPersistencePort.findById(USER_ID)).thenReturn(expectedUser);
+
+        boolean isOwner = userUseCase.isOwner(USER_ID);
+
+        verify(userPersistencePort).findById(USER_ID);
+        assertTrue(isOwner);
+    }
+
+
+    @Test
+    void isOwner_userIsNotOwner(){
+        final User adminUser = User.builder()
+            .id(USER_ID)
+            .name(USER_NAME)
+            .lastname(USER_LASTNAME)
+            .identityDocument(USER_IDENTITY_DOCUMENT)
+            .email(USER_EMAIL)
+            .phone(USER_PHONE)
+            .birthdate(USER_BIRTHDATE)
+            .password(USER_PASSWORD)
+            .role(Role.builder().id(1L).name(RoleName.ADMIN).build())
+            .build();
+        when(userPersistencePort.findById(USER_ID)).thenReturn(adminUser);
+
+        boolean isOwner = userUseCase.isOwner(USER_ID);
+
+        verify(userPersistencePort).findById(USER_ID);
+        assertFalse(isOwner);
+    }
 }

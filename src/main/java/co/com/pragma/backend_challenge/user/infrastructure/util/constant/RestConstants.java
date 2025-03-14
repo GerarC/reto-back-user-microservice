@@ -14,11 +14,13 @@ public class RestConstants {
     public static final String SWAGGER_CODE_NOT_FOUND = "404";
     public static final String SWAGGER_CODE_CONFLICT = "409";
 
+    // Validations
+    public static final String SWAGGER_ERROR_VALIDATIONS_DO_NOT_PASS = "Validations don't pass";
+
     // HOME
     public static final String SWAGGER_SUMMARY_GET_HOME = "And endpoint to test if app is running";
 
     // USERS
-    public static final String SWAGGER_ERROR_VALIDATIONS_DO_NOT_PASS = "Validations doesn't pass";
     public static final String SWAGGER_SUMMARY_CREATE_OWNER = "Create an owner using the given valid info";
     public static final String SWAGGER_DESCRIPTION_CREATED_OWNER = "Owner has been created successfully";
     public static final String SWAGGER_ERROR_USER_WITH_EMAIL_ALREADY_EXISTS = "An user with that email already exists";
