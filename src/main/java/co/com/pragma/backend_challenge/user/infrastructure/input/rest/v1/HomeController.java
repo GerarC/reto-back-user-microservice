@@ -13,6 +13,6 @@ public class HomeController {
     @Operation(summary = RestConstants.SWAGGER_SUMMARY_GET_HOME)
     @GetMapping
     public String home(){
-        return "Hello";
+        return "User's Microservice";
     }
 }

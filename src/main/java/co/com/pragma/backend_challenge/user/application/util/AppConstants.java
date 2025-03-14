@@ -27,5 +27,4 @@ public class AppConstants {
 
     // Invalid date messages
     public static final String BIRTHDATE_MUST_BE_PAST_DATE = "Birthdate must be a past date";
-
 }

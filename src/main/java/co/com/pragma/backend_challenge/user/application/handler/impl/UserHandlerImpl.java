@@ -1,6 +1,7 @@
 package co.com.pragma.backend_challenge.user.application.handler.impl;
 
 import co.com.pragma.backend_challenge.user.application.dto.request.OwnerRequest;
+import co.com.pragma.backend_challenge.user.application.dto.response.IsOwnerResponse;
 import co.com.pragma.backend_challenge.user.application.dto.response.UserResponse;
 import co.com.pragma.backend_challenge.user.application.handler.UserHandler;
 import co.com.pragma.backend_challenge.user.application.mapper.OwnerRequestMapper;
@@ -21,10 +22,17 @@ public class UserHandlerImpl implements UserHandler {
 
     @Override
     public UserResponse createOwner(OwnerRequest owner) {
-        User user =  ownerRequestMapper.toDomain(owner);
+        User user = ownerRequestMapper.toDomain(owner);
         user.setPassword(passwordEncoder.encode(owner.getPassword()));
         return userResponseMapper.toResponse(
                 userServicePort.createOwner(user)
         );
+    }
+
+    @Override
+    public IsOwnerResponse isOwner(String id) {
+        return IsOwnerResponse.builder()
+                .isOwner(userServicePort.isOwner(id))
+                .build();
     }
 }

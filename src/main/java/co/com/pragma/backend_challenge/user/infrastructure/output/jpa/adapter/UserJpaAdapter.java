@@ -38,4 +38,11 @@ public class UserJpaAdapter implements UserPersistencePort {
                 userRepository.findByEmail(email).orElse(null)
         );
     }
+
+    @Override
+    public User findById(String id) {
+        return userEntityMapper.toDomain(
+                userRepository.findById(id).orElse(null)
+        );
+    }
 }

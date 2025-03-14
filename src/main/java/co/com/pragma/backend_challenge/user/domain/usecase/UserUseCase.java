@@ -36,6 +36,13 @@ public class UserUseCase implements UserServicePort {
         return saveUser(user);
     }
 
+    @Override
+    public boolean isOwner(String id) {
+        User user = userPersistencePort.findById(id);
+        if (user == null) throw new EntityNotFoundException(User.class.getSimpleName(), id);
+        return user.getRole().getName().equals(RoleName.OWNER);
+    }
+
     private User saveUser(User user) {
         validateUser(user);
         return userPersistencePort.saveUser(user);
