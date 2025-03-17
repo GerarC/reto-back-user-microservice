@@ -42,6 +42,7 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
 
             // Authentication
+            "/v1/home",
             "/v1/auth/**",
     };
 
@@ -52,7 +53,6 @@ public class SecurityConfiguration {
                 .cors(config -> config.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(AUTH_WHITELIST).permitAll();
-                    auth.requestMatchers("/v1/auth/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->

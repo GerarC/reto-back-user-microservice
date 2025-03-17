@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Generated
-@Generated
 @Configuration
 @RequiredArgsConstructor
 public class DataInitializer {
