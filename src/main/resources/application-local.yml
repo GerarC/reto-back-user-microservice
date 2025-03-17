@@ -23,6 +23,7 @@ logging:
     level:
         web: trace
         org:
+            hibernate: debug
             springframework:
                 web: trace
 
@@ -34,3 +35,7 @@ server:
     servlet:
         context-path: ${APP_PATH:/mall}
     port: 8099
+
+allowed-origins:
+    http://localhost:3000/,
+    http://localhost:5173/,
