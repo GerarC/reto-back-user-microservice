@@ -4,6 +4,7 @@ import co.com.pragma.backend_challenge.user.domain.util.annotation.Generated;
 
 @Generated
 public class RestConstants {
+
     private RestConstants() {
         throw new IllegalStateException("Utility Class");
     }
@@ -30,6 +31,10 @@ public class RestConstants {
     public static final String SWAGGER_SUMMARY_GET_IS_OWNER = "Get if a user has role of Owner or not";
     public static final String SWAGGER_DESCRIPTION_EXIST_USER = "If user exist return true or false";
     public static final String SWAGGER_ERROR_USER_DOES_NOT_EXIST = "Requested user doesn't exist";
+    public static final String SWAGGER_SUMMARY_CREATE_EMPLOYEE = "Create an employee using the given valid info";
+    public static final String SWAGGER_DESCRIPTION_CREATED_EMPLOYEE = "Employee has been created successfully";
+    public static final String SWAGGER_SUMMARY_CREATE_CLIENT = "Create an client using the given valid info";
+    public static final String SWAGGER_DESCRIPTION_CREATED_CLIENT = "Client has been created successfully";
 
     //Authentication
     public static final String SWAGGER_SUMMARY_LOGIN = "Creates a token if credentials are right";

@@ -54,6 +54,11 @@ public class UserUseCase implements UserServicePort {
         return savedUser;
     }
 
+    @Override
+    public User createCustomer(User user) {
+        return saveUser(user, RoleName.CUSTOMER);
+    }
+
     private void registerInRestaurant(User user, String restaurantId) {
         try {
             restaurantPersistencePort.registerEmployeeInRestaurant(user, restaurantId);

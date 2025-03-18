@@ -39,7 +39,7 @@ class UserUseCaseTest {
     public static final String USER_ID = "user-id";
     public static final String USER_NAME = "User";
     public static final String USER_LASTNAME = "Dummy";
-    public static final String USER_IDENTITY_DOCUMENT= "1223334444";
+    public static final String USER_IDENTITY_DOCUMENT = "1223334444";
     public static final String USER_PHONE = "+573225545645";
     public static final String USER_EMAIL = "email@dummy.com";
     public static final String USER_PASSWORD = "password";
@@ -51,7 +51,7 @@ class UserUseCaseTest {
             .id(ROLE_ID)
             .name(ROLE_NAME)
             .build();
-    private final User user  = User.builder()
+    private final User user = User.builder()
             .name(USER_NAME)
             .lastname(USER_LASTNAME)
             .identityDocument(USER_IDENTITY_DOCUMENT)
@@ -60,7 +60,7 @@ class UserUseCaseTest {
             .birthdate(USER_BIRTHDATE)
             .password(USER_PASSWORD)
             .build();
-    private final User expectedUser  = User.builder()
+    private final User expectedUser = User.builder()
             .id(USER_ID)
             .name(USER_NAME)
             .lastname(USER_LASTNAME)
@@ -96,7 +96,7 @@ class UserUseCaseTest {
     }
 
     @Test
-    void createUser_RoleNotFound(){
+    void createUser_RoleNotFound() {
         // Arrange
         when(rolePersistencePort.findByName(any())).thenReturn(null);
 
@@ -105,7 +105,7 @@ class UserUseCaseTest {
     }
 
     @Test
-    void createUser_EmailAlreadyExists(){
+    void createUser_EmailAlreadyExists() {
         when(rolePersistencePort.findByName(any())).thenReturn(role);
         when(userPersistencePort.findByEmail(USER_EMAIL)).thenReturn(expectedUser);
 
@@ -113,7 +113,7 @@ class UserUseCaseTest {
     }
 
     @Test
-    void isOwner(){
+    void isOwner() {
         when(userPersistencePort.findById(USER_ID)).thenReturn(expectedUser);
 
         boolean isOwner = userUseCase.isOwner(USER_ID);
@@ -124,18 +124,18 @@ class UserUseCaseTest {
 
 
     @Test
-    void isOwner_userIsNotOwner(){
+    void isOwner_userIsNotOwner() {
         final User adminUser = User.builder()
-            .id(USER_ID)
-            .name(USER_NAME)
-            .lastname(USER_LASTNAME)
-            .identityDocument(USER_IDENTITY_DOCUMENT)
-            .email(USER_EMAIL)
-            .phone(USER_PHONE)
-            .birthdate(USER_BIRTHDATE)
-            .password(USER_PASSWORD)
-            .role(Role.builder().id(1L).name(RoleName.ADMIN).build())
-            .build();
+                .id(USER_ID)
+                .name(USER_NAME)
+                .lastname(USER_LASTNAME)
+                .identityDocument(USER_IDENTITY_DOCUMENT)
+                .email(USER_EMAIL)
+                .phone(USER_PHONE)
+                .birthdate(USER_BIRTHDATE)
+                .password(USER_PASSWORD)
+                .role(Role.builder().id(1L).name(RoleName.ADMIN).build())
+                .build();
         when(userPersistencePort.findById(USER_ID)).thenReturn(adminUser);
 
         boolean isOwner = userUseCase.isOwner(USER_ID);
@@ -148,7 +148,7 @@ class UserUseCaseTest {
     void createEmployee_Success() {
         // Arrange
 
-        Role employeeRole =Role.builder().id(2L).name(RoleName.EMPLOYEE).build();
+        Role employeeRole = Role.builder().id(2L).name(RoleName.EMPLOYEE).build();
         expectedUser.setRole(employeeRole);
 
         when(rolePersistencePort.findByName(RoleName.EMPLOYEE)).thenReturn(Role.builder().id(2L).name(RoleName.EMPLOYEE).build());
@@ -183,6 +183,26 @@ class UserUseCaseTest {
         // Act & Assert
         assertThrows(ErrorRegisteringEmployeeInRestaurantException.class, () -> userUseCase.createEmployee(user, RESTAURANT_ID));
         verify(userPersistencePort).deleteById(expectedUser.getId());
+    }
+
+    @Test
+    void createCustomer() {
+        Role customerRole = Role.builder().id(2L).name(RoleName.CUSTOMER).build();
+        expectedUser.setRole(customerRole);
+
+        when(userPersistencePort.findByEmail(USER_EMAIL)).thenReturn(null);
+        when(userPersistencePort.findByIdentityDocument(USER_IDENTITY_DOCUMENT)).thenReturn(null);
+        when(userPersistencePort.saveUser(any(User.class))).thenReturn(expectedUser);
+        when(rolePersistencePort.findByName(any())).thenReturn(role);
+
+        // Act
+        User savedUser = userUseCase.createCustomer(user);
+
+        verify(userPersistencePort).findByEmail(USER_EMAIL);
+        verify(userPersistencePort).findByIdentityDocument(USER_IDENTITY_DOCUMENT);
+        verify(userPersistencePort).saveUser(any(User.class));
+        assertEquals(customerRole.getName(), savedUser.getRole().getName());
+        assertEquals(USER_EMAIL, savedUser.getEmail());
     }
 
 }
