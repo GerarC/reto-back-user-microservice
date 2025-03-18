@@ -1,6 +1,7 @@
 package co.com.pragma.backend_challenge.user.domain.util;
 
 public class DomainConstants {
+
     private DomainConstants() {
         throw new IllegalStateException("Utility Class");
     }
@@ -14,7 +15,8 @@ public class DomainConstants {
     public static final String ENTITY_ALREADY_EXISTS_TEMPLATE_MESSAGE = "An entity of type '%s' with id '%s' already exists";
     public static final String USER_WITH_EMAIL_ALREADY_EXIST_TEMPLATE_MESSAGE = "An user with '%s' as email already exists";
     public static final String USER_WITH_IDENTITY_DOCUMENT_ALREADY_EXIST_TEMPLATE_MESSAGE = "An user with '%s' as identity document already exists";
-    public static final String USER_WITH_EMAIL_NOT_FOUND = "Password or Email incorrect";
+    public static final String USER_WITH_EMAIL_NOT_FOUND_MESSAGE = "Password or Email incorrect";
+    public static final String ERROR_REGISTERING_EMPLOYEE_MESSAGE = "An error has occurred registering user in restaurant";
 
     public static final String INVALID_TOKEN_MESSAGE = "Given token is invalid";
     public static final String EXPIRED_TOKEN_MESSAGE = "Given token has expired";

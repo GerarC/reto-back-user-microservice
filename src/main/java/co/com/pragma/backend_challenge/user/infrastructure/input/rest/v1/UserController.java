@@ -1,6 +1,7 @@
 package co.com.pragma.backend_challenge.user.infrastructure.input.rest.v1;
 
-import co.com.pragma.backend_challenge.user.application.dto.request.OwnerRequest;
+import co.com.pragma.backend_challenge.user.application.dto.request.EmployeeRequest;
+import co.com.pragma.backend_challenge.user.application.dto.request.UserRequest;
 import co.com.pragma.backend_challenge.user.application.dto.response.IsOwnerResponse;
 import co.com.pragma.backend_challenge.user.application.dto.response.UserResponse;
 import co.com.pragma.backend_challenge.user.application.handler.UserHandler;
@@ -56,8 +57,13 @@ public class UserController {
     })
     @PostMapping("/owners")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<UserResponse> createOwner(@RequestBody @Valid OwnerRequest owner){
+    public ResponseEntity<UserResponse> createOwner(@RequestBody @Valid UserRequest owner){
         return ResponseEntity.status(HttpStatus.CREATED).body(userHandler.createOwner(owner));
+    }
+
+    @PostMapping("/employees")
+    public ResponseEntity<UserResponse> createOwner(@RequestBody @Valid EmployeeRequest employeeRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(userHandler.createEmployee(employeeRequest));
     }
 
     @Operation(summary = RestConstants.SWAGGER_SUMMARY_GET_IS_OWNER)
@@ -79,4 +85,6 @@ public class UserController {
                 userHandler.isOwner(id)
         );
     }
+
+
 }

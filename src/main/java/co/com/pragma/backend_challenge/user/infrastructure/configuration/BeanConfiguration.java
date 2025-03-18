@@ -4,6 +4,7 @@ import co.com.pragma.backend_challenge.user.domain.api.UserServicePort;
 import co.com.pragma.backend_challenge.user.domain.api.security.AuthenticationServicePort;
 import co.com.pragma.backend_challenge.user.domain.api.security.TokenServicePort;
 import co.com.pragma.backend_challenge.user.domain.model.User;
+import co.com.pragma.backend_challenge.user.domain.spi.persistence.RestaurantPersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.persistence.RolePersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.persistence.UserPersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.security.AuthenticationSecurityPort;
@@ -32,8 +33,15 @@ import static co.com.pragma.backend_challenge.user.infrastructure.util.constant.
 public class BeanConfiguration {
     // Service Ports
     @Bean
-    public UserServicePort userServicePort(UserPersistencePort userPersistencePort, RolePersistencePort rolePersistencePort){
-        return new UserUseCase(userPersistencePort, rolePersistencePort);
+    public UserServicePort userServicePort(UserPersistencePort userPersistencePort,
+                                           RolePersistencePort rolePersistencePort,
+                                           RestaurantPersistencePort restaurantPersistencePort
+    ){
+        return new UserUseCase(
+                userPersistencePort,
+                rolePersistencePort,
+                restaurantPersistencePort
+        );
     }
 
     @Bean

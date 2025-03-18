@@ -2,8 +2,10 @@ package co.com.pragma.backend_challenge.user.domain.usecase;
 
 import co.com.pragma.backend_challenge.user.domain.exception.EntityAlreadyExistsException;
 import co.com.pragma.backend_challenge.user.domain.exception.EntityNotFoundException;
+import co.com.pragma.backend_challenge.user.domain.exception.ErrorRegisteringEmployeeInRestaurantException;
 import co.com.pragma.backend_challenge.user.domain.model.Role;
 import co.com.pragma.backend_challenge.user.domain.model.User;
+import co.com.pragma.backend_challenge.user.domain.spi.persistence.RestaurantPersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.persistence.RolePersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.persistence.UserPersistencePort;
 import co.com.pragma.backend_challenge.user.domain.util.enums.RoleName;
@@ -17,20 +19,23 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class UserUseCaseTest {
-
     @Mock
     private UserPersistencePort userPersistencePort;
 
     @Mock
     private RolePersistencePort rolePersistencePort;
 
+    @Mock
+    private RestaurantPersistencePort restaurantPersistencePort;
+
     @InjectMocks
     private UserUseCase userUseCase;
 
+
+    public static final String RESTAURANT_ID = "restaurant-123";
     public static final String USER_ID = "user-id";
     public static final String USER_NAME = "User";
     public static final String USER_LASTNAME = "Dummy";
@@ -138,4 +143,46 @@ class UserUseCaseTest {
         verify(userPersistencePort).findById(USER_ID);
         assertFalse(isOwner);
     }
+
+    @Test
+    void createEmployee_Success() {
+        // Arrange
+
+        Role employeeRole =Role.builder().id(2L).name(RoleName.EMPLOYEE).build();
+        expectedUser.setRole(employeeRole);
+
+        when(rolePersistencePort.findByName(RoleName.EMPLOYEE)).thenReturn(Role.builder().id(2L).name(RoleName.EMPLOYEE).build());
+        when(userPersistencePort.saveUser(any(User.class))).thenReturn(expectedUser);
+
+        // Act
+        User savedUser = userUseCase.createEmployee(user, RESTAURANT_ID);
+
+        // Assert
+        verify(rolePersistencePort).findByName(RoleName.EMPLOYEE);
+        verify(userPersistencePort).saveUser(any(User.class));
+        verify(restaurantPersistencePort).registerEmployeeInRestaurant(savedUser, RESTAURANT_ID);
+        assertEquals(RoleName.EMPLOYEE, savedUser.getRole().getName());
+    }
+
+    @Test
+    void createEmployee_RoleNotFound() {
+        // Arrange
+        when(rolePersistencePort.findByName(RoleName.EMPLOYEE)).thenReturn(null);
+
+        // Act & Assert
+        assertThrows(EntityNotFoundException.class, () -> userUseCase.createEmployee(user, "restaurant-123"));
+    }
+
+    @Test
+    void createEmployee_ErrorRegisteringInRestaurant() {
+        // Arrange
+        when(rolePersistencePort.findByName(RoleName.EMPLOYEE)).thenReturn(Role.builder().id(2L).name(RoleName.EMPLOYEE).build());
+        when(userPersistencePort.saveUser(any(User.class))).thenReturn(expectedUser);
+        doThrow(new RuntimeException()).when(restaurantPersistencePort).registerEmployeeInRestaurant(any(User.class), any(String.class));
+
+        // Act & Assert
+        assertThrows(ErrorRegisteringEmployeeInRestaurantException.class, () -> userUseCase.createEmployee(user, RESTAURANT_ID));
+        verify(userPersistencePort).deleteById(expectedUser.getId());
+    }
+
 }

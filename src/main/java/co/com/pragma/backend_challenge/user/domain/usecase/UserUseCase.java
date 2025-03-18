@@ -3,9 +3,11 @@ package co.com.pragma.backend_challenge.user.domain.usecase;
 import co.com.pragma.backend_challenge.user.domain.api.UserServicePort;
 import co.com.pragma.backend_challenge.user.domain.exception.EntityAlreadyExistsException;
 import co.com.pragma.backend_challenge.user.domain.exception.EntityNotFoundException;
+import co.com.pragma.backend_challenge.user.domain.exception.ErrorRegisteringEmployeeInRestaurantException;
 import co.com.pragma.backend_challenge.user.domain.exception.UnderAgedUserException;
 import co.com.pragma.backend_challenge.user.domain.model.Role;
 import co.com.pragma.backend_challenge.user.domain.model.User;
+import co.com.pragma.backend_challenge.user.domain.spi.persistence.RestaurantPersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.persistence.RolePersistencePort;
 import co.com.pragma.backend_challenge.user.domain.spi.persistence.UserPersistencePort;
 import co.com.pragma.backend_challenge.user.domain.util.DomainConstants;
@@ -17,23 +19,19 @@ import java.time.temporal.ChronoUnit;
 public class UserUseCase implements UserServicePort {
     private final UserPersistencePort userPersistencePort;
     private final RolePersistencePort rolePersistencePort;
+    private final RestaurantPersistencePort restaurantPersistencePort;
 
-    public UserUseCase(UserPersistencePort userPersistencePort, RolePersistencePort rolePersistencePort) {
+    public UserUseCase(UserPersistencePort userPersistencePort,
+                       RolePersistencePort rolePersistencePort,
+                       RestaurantPersistencePort restaurantPersistencePort) {
         this.userPersistencePort = userPersistencePort;
         this.rolePersistencePort = rolePersistencePort;
+        this.restaurantPersistencePort = restaurantPersistencePort;
     }
 
     @Override
     public User createOwner(User user) {
-        Role role = rolePersistencePort.findByName(RoleName.OWNER);
-        if (role == null) throw new EntityNotFoundException(
-                String.format(
-                        DomainConstants.ROLE_NOT_FOUND_TEMPLATE_MESSAGE,
-                        RoleName.OWNER.name()
-                )
-        );
-        user.setRole(role);
-        return saveUser(user);
+        return saveUser(user, RoleName.OWNER);
     }
 
     @Override
@@ -49,7 +47,31 @@ public class UserUseCase implements UserServicePort {
         return user;
     }
 
-    private User saveUser(User user) {
+    @Override
+    public User createEmployee(User user, String restaurantId) {
+        User savedUser = saveUser(user, RoleName.EMPLOYEE);
+        registerInRestaurant(savedUser, restaurantId);
+        return savedUser;
+    }
+
+    private void registerInRestaurant(User user, String restaurantId) {
+        try {
+            restaurantPersistencePort.registerEmployeeInRestaurant(user, restaurantId);
+        } catch (Exception e){
+            userPersistencePort.deleteById(user.getId());
+            throw new ErrorRegisteringEmployeeInRestaurantException();
+        }
+    }
+
+    private User saveUser(User user, RoleName rolename) {
+        Role role = rolePersistencePort.findByName(rolename);
+        if (role == null) throw new EntityNotFoundException(
+                String.format(
+                        DomainConstants.ROLE_NOT_FOUND_TEMPLATE_MESSAGE,
+                        rolename.name()
+                )
+        );
+        user.setRole(role);
         validateUser(user);
         return userPersistencePort.saveUser(user);
     }
@@ -68,4 +90,6 @@ public class UserUseCase implements UserServicePort {
         if (user.getBirthdate().until(LocalDate.now(), ChronoUnit.YEARS) < DomainConstants.MINIMUM_VALID_YEARS)
             throw new UnderAgedUserException();
     }
+
+
 }

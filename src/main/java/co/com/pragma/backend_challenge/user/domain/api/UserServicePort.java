@@ -6,4 +6,5 @@ public interface UserServicePort {
     User createOwner(User user);
     boolean isOwner(String id);
     User findById(String id);
+    User createEmployee(User user, String restaurantId);
 }
