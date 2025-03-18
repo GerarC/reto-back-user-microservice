@@ -25,8 +25,7 @@ public class UserHandlerImpl implements UserHandler {
 
     @Override
     public UserResponse createOwner(UserRequest owner) {
-        User user = userRequestMapper.toDomain(owner);
-        user.setPassword(passwordEncoder.encode(owner.getPassword()));
+        User user = encryptPasswordOfUserRequest(owner);
         return userResponseMapper.toResponse(
                 userServicePort.createOwner(user)
         );
@@ -46,5 +45,19 @@ public class UserHandlerImpl implements UserHandler {
         return userResponseMapper.toResponse(
                 userServicePort.createEmployee(user, employeeRequest.getRestaurantId())
         );
+    }
+
+    @Override
+    public UserResponse createCustomer(UserRequest client) {
+        User user = encryptPasswordOfUserRequest(client);
+        return userResponseMapper.toResponse(
+                userServicePort.createCustomer(user)
+        );
+    }
+
+    private User encryptPasswordOfUserRequest(UserRequest request){
+        User user = userRequestMapper.toDomain(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        return user;
     }
 }

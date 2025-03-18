@@ -1,7 +1,6 @@
 package co.com.pragma.backend_challenge.user.application.handler.impl;
 
 import co.com.pragma.backend_challenge.user.application.dto.request.AuthenticationRequest;
-import co.com.pragma.backend_challenge.user.application.dto.request.AuthorizationRequest;
 import co.com.pragma.backend_challenge.user.application.dto.response.AuthenticationResponse;
 import co.com.pragma.backend_challenge.user.application.handler.AuthenticationHandler;
 import co.com.pragma.backend_challenge.user.application.mapper.response.AuthenticationResponseMapper;

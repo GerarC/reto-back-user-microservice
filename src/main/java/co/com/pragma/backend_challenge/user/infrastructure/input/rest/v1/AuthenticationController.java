@@ -1,9 +1,7 @@
 package co.com.pragma.backend_challenge.user.infrastructure.input.rest.v1;
 
 import co.com.pragma.backend_challenge.user.application.dto.request.AuthenticationRequest;
-import co.com.pragma.backend_challenge.user.application.dto.request.AuthorizationRequest;
 import co.com.pragma.backend_challenge.user.application.dto.response.AuthenticationResponse;
-import co.com.pragma.backend_challenge.user.application.dto.response.UserResponse;
 import co.com.pragma.backend_challenge.user.application.handler.AuthenticationHandler;
 import co.com.pragma.backend_challenge.user.infrastructure.configuration.advisor.response.ExceptionResponse;
 import co.com.pragma.backend_challenge.user.infrastructure.configuration.advisor.response.ValidationExceptionResponse;
@@ -28,7 +26,7 @@ public class AuthenticationController {
     private final AuthenticationHandler authenticationHandler;
 
 
-    @Operation(summary = RestConstants.SWAGGER_SUMMARY_CREATE_OWNER)
+    @Operation(summary = RestConstants.SWAGGER_SUMMARY_LOGIN)
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = RestConstants.SWAGGER_CODE_ACCEPTED,
@@ -54,7 +52,7 @@ public class AuthenticationController {
         );
     }
 
-    @Operation(summary = RestConstants.SWAGGER_SUMMARY_CREATE_OWNER)
+    @Operation(summary = RestConstants.SWAGGER_SUMMARY_AUTHORIZE)
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = RestConstants.SWAGGER_CODE_OK,
