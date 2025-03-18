@@ -1,6 +1,7 @@
 package co.com.pragma.backend_challenge.user.infrastructure.configuration.security.filter;
 
 import co.com.pragma.backend_challenge.user.domain.api.security.TokenServicePort;
+import co.com.pragma.backend_challenge.user.domain.util.TokenHolder;
 import co.com.pragma.backend_challenge.user.infrastructure.util.constant.ConfigurationConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,6 +38,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String username = tokenServicePort.getUsername(token);
 
         setContextAuthentication(request, token, username);
+
+        TokenHolder.setToken(authorizationHeader);
 
         filterChain.doFilter(request, response);
 

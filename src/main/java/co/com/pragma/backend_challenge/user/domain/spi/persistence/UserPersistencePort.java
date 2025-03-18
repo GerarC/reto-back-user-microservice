@@ -7,4 +7,5 @@ public interface UserPersistencePort {
     User findByIdentityDocument(String identityDocument);
     User findByEmail(String email);
     User findById(String id);
+    void deleteById(String id);
 }

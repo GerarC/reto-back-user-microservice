@@ -45,4 +45,9 @@ public class UserJpaAdapter implements UserPersistencePort {
                 userRepository.findById(id).orElse(null)
         );
     }
+
+    @Override
+    public void deleteById(String id) {
+        userRepository.deleteById(id);
+    }
 }

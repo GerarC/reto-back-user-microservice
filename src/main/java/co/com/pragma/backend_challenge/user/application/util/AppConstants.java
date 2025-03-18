@@ -19,6 +19,7 @@ public class AppConstants {
     public static final String PHONE_FIELD_NOT_NULL = "'phone' field must not be null";
     public static final String EMAIL_FIELD_NOT_NULL = "'email' field must not be null";
     public static final String PASSWORD_FIELD_NOT_NULL = "'password' field must not be null";
+    public static final String RESTAURANT_ID_FIELD_NOT_NULL = "'restaurant id' field must not be null";
 
     // Wrong pattern messages
     public static final String WRONG_EMAIL_FORMAT = "Given email does not match with expected pattern";

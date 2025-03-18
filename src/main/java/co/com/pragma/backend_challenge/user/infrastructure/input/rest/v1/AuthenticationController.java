@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class AuthenticationController {
                     content =  @Content(schema = @Schema(implementation = ValidationExceptionResponse.class))
             ),
     })
+    @PermitAll
     @GetMapping("/login")
     public final ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
         return ResponseEntity.accepted().body(
@@ -70,6 +72,7 @@ public class AuthenticationController {
                     content =  @Content(schema = @Schema(implementation = ValidationExceptionResponse.class))
             ),
     })
+    @PermitAll
     @GetMapping("/authorize")
     public final ResponseEntity<AuthenticationResponse> validateToken(String token){
         return ResponseEntity.ok(

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class OwnerRequest {
+public class UserRequest {
     @NotNull(message = AppConstants.IDENTITY_DOCUMENT_FIELD_NOT_NULL)
     @Pattern(regexp = AppConstants.IDENTITY_DOCUMENT_REGEX, message = AppConstants.WRONG_IDENTITY_DOCUMENT_FORMAT)
     private String identityDocument;

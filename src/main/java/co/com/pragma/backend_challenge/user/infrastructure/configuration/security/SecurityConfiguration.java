@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                 .cors(config -> config.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                    auth.requestMatchers("/v1/auth/**");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->
